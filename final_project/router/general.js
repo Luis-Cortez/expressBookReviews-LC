@@ -34,7 +34,7 @@ public_users.get('/isbn/:isbn', async function (req, res) {
   try {
     const {isbn} = await req.params;
 
-    if(!isbn ||  !books[isbn] ){
+    if(!books[isbn] ){
       return  res.status(404).json({message: "Book Doesn't Exist"});
     }
 
@@ -89,8 +89,21 @@ public_users.get('/title/:title', async function (req, res) {
 });
 
 //  Get book review
-public_users.get('/review/:isbn',function (req, res) {
-  
+public_users.get('/review/:isbn',async function (req, res) {
+  try {
+    const {isbn} = await req.params;
+
+    if( !books[isbn] ){
+      return  res.status(404).json({message: "Book Doesn't Exist"});
+    }
+
+    const reviews = books[isbn].reviews;
+
+    return res.status(200).json( {reviews} );
+  } catch (error) {
+      console.log(error)
+      return res.status(500).json({message: "Server error"});
+  }
 });
 
 module.exports.general = public_users;
