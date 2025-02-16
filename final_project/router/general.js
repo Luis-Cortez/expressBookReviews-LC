@@ -14,9 +14,27 @@ function findBook( key, userValue) {
   return false;
 }
 
-public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+public_users.post("/register", async (req,res) => {
+  try {
+    const { username, password } = await req.body;
+
+    if( password.length < 4){
+      return res.status(400).json({message: "Password Too short"});
+    }
+
+    const userIsValid = isValid( username );
+
+    if( userIsValid  ){
+      users.push({username: username, password: password })
+      return res.status(200).json({message: "User Created"});
+    }
+    
+    return res.status(400).json({message: "Invalid Username"});
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message: "server error"});
+  }
 });
 
 // Get the book list available in the shop
@@ -57,6 +75,7 @@ public_users.get('/author/:author', async function (req, res) {
     if(name == "unknown"){
       return res.status(404).json(" Author is unknown ");
     }
+
     const bookDetails = findBook("author", name);
 
     if( bookDetails ){
