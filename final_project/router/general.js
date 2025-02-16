@@ -54,7 +54,9 @@ public_users.get('/author/:author', async function (req, res) {
   try {
     const {author} = await req.params;
     const name = author.split("+").join(" ").toLowerCase();
-
+    if(name == "unknown"){
+      return res.status(404).json(" Author is unknown ");
+    }
     const bookDetails = findBook("author", name);
 
     if( bookDetails ){
