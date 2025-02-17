@@ -29,6 +29,7 @@ app.use("/customer/auth/*", async function auth(req,res,next){
         }
 
         return next()
+        
     } catch (error) {
         console.log(error)
         return res.json({message:error}).status(500);

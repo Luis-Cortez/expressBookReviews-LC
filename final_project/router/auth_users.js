@@ -96,7 +96,6 @@ regd_users.delete( "/auth/review/:isbn", async (req, res)=>{
     }
 
     const book = books[isbn]; 
-    
     const newreviews = {}
 
     for( userName in book.reviews ){
@@ -107,13 +106,9 @@ regd_users.delete( "/auth/review/:isbn", async (req, res)=>{
         }
       }
 
-      books[isbn]["reviews"] = newreviews
+    books[isbn]["reviews"] = newreviews;
 
-      console.log(books[isbn]["reviews"])
     return res.json(newreviews).status(200)
-
-  // book.reviews[username] = review ;
-  // return res.json(book.reviews).status(200);
 
   } catch (error) {
     console.log(error)
