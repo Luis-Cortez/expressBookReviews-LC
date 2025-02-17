@@ -7,14 +7,6 @@ const {userNameExist} = require("./helpers.js")
 
 let users = [{username:"luis", password:"12345"}];
 
-// function userNameExist( username, users ){
-//   for( let  i = 0; i < users.length; i++){
-//     if( users[i].username == username){
-//       return true;
-//     }
-//   }
-//   return false;
-// }
 
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
