@@ -3,16 +3,16 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
-
-function findBook( key, userValue) {
-  for( book in books ){
-    if( books[book][key].toLowerCase() == userValue ){
-        return books[book];
-    }
-    continue
-}
-  return false;
-}
+const {findBook} = require("./helpers");
+// function findBook( key, userValue, books) {
+//   for( book in books ){
+//     if( books[book][key].toLowerCase() == userValue ){
+//         return books[book];
+//     }
+//     continue
+// }
+//   return false;
+// }
 
 public_users.post("/register", async (req,res) => {
   try {
@@ -76,7 +76,7 @@ public_users.get('/author/:author', async function (req, res) {
       return res.status(404).json(" Author is unknown ");
     }
 
-    const bookDetails = findBook("author", name);
+    const bookDetails = findBook("author", name, books);
 
     if( bookDetails ){
       return  res.status(200).json(bookDetails);
@@ -96,7 +96,7 @@ public_users.get('/title/:title', async function (req, res) {
     const {title} = await req.params;
     const text = title.split("+").join(" ").toLowerCase();
 
-    const bookDetails = findBook("title", text);
+    const bookDetails = findBook("title", text, books);
 
     if( bookDetails ){
       return  res.status(200).json(bookDetails);
