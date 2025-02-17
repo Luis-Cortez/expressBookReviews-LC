@@ -67,8 +67,8 @@ regd_users.put("/auth/review/:isbn", async (req, res) => {
     const book = books[isbn]; 
     
 
-    for( Review in books.reviews ){
-      if( Review[username] ){
+    for( Review in book.reviews ){
+      if( Review[username]) {
         Review[username] = review;
         return res.json(book.reviews).status(200)
       }
@@ -83,6 +83,43 @@ regd_users.put("/auth/review/:isbn", async (req, res) => {
       return res.json({message:error}).status(500)
     }
 });
+
+regd_users.delete( "/auth/review/:isbn", async (req, res)=>{
+  try{
+    const token = await req.headers.authorization;
+    const {isbn} = await req.params;
+    const tokenValue = token.slice(7, token.length);
+    const {username} = jwt.verify( tokenValue, secret );
+    
+    if( !books[isbn] ) {
+      return res.json({mesage:"no such book"}).status(404)
+    }
+
+    const book = books[isbn]; 
+    
+    const newreviews = {}
+
+    for( userName in book.reviews ){
+      if( userName == username ){
+          continue
+      }else{
+        newreviews[userName] = book.reviews[userName]
+        }
+      }
+
+      books[isbn]["reviews"] = newreviews
+
+      console.log(books[isbn]["reviews"])
+    return res.json(newreviews).status(200)
+
+  // book.reviews[username] = review ;
+  // return res.json(book.reviews).status(200);
+
+  } catch (error) {
+    console.log(error)
+    return res.json({message:error}).status(500)
+  }
+})
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;

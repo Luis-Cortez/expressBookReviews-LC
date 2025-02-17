@@ -30,12 +30,12 @@ public_users.post("/register", async (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
+public_users.get('/', async function (req, res) {
   try {
     return res.status(200).json(books);
   } catch (error) {
     console.log(error)
-    return res.status(501);
+    return res.status(501).message(error);
   }
 });
 
@@ -113,6 +113,7 @@ public_users.get('/review/:isbn',async function (req, res) {
     const reviews = books[isbn].reviews;
 
     return res.status(200).json( {reviews} );
+    
   } catch (error) {
       console.log(error)
       return res.status(500).json({message: "Server error"});
